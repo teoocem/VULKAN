@@ -1,0 +1,11 @@
+# ninja log v5
+1	144	7122566879729689	build.ninja	522c6a6f8f6a1ad7
+0	375	7120760501170987	CMakeFiles/untitled.dir/main.cpp.obj	7ed2f745a4eff6a4
+1286	1511	7122565344220899	VULKAN.exe	106100fb5794fa2b
+4	446	7120760501880986	CMakeFiles/untitled.dir/Renderer.cpp.obj	146873b13fa16e23
+3	1286	7122565341989552	CMakeFiles/VULKAN.dir/Renderer.cpp.obj	c9fef6e1989335ca
+2	507	7122554441131870	CMakeFiles/VULKAN.dir/main.cpp.obj	4ba0c8a4b933e4ab
+11	66	7122546501506232	CMakeFiles/VULKAN.dir/Pipeline.cpp.obj	fbb6e4e341eb18d4
+2	547	7122571124680843	CMakeFiles/VULKAN.dir/main.cpp.obj	4ba0c8a4b933e4ab
+7	1432	7122571133532543	CMakeFiles/VULKAN.dir/Renderer.cpp.obj	c9fef6e1989335ca
+1457	1695	7122571136122536	VULKAN.exe	106100fb5794fa2b
