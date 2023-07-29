@@ -31,7 +31,11 @@ private:
     VkFormat swapChainImageFormat;
     VkExtent2D swapChainExtent;
     std::vector<VkImage> swapChainImages;
-
+    std::vector<VkImageView> imageViews;
+    std::vector<VkFramebuffer> frameBuffers;
+    VkRenderPass renderPass;
+    VkCommandPool commandPool;
+    VkCommandBuffer commandBuffer;
 
     struct {std::vector<VkSurfaceFormatKHR> formats;std::vector<VkPresentModeKHR>presentModes;VkSurfaceCapabilitiesKHR capabilities;} swapChainSupportInfos;
 
@@ -78,6 +82,16 @@ public:
     std::vector<char> readFile(const char*);
 
     VkShaderModule createShaderModule(std::vector<char> &code);
+
+    void createRenderPass();
+
+    void createFrameBuffers();
+
+    void createCommandPool();
+
+    void createCommandBuffer();
+
+    void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
 };
 
 

@@ -5,7 +5,13 @@
 #ifndef VULKAN_PIPELINE_H
 #define VULKAN_PIPELINE_H
 
+#define GLFW_INCLUDE_VULKAN
+#include<glfw3.h>
 class Pipeline {
+private:
+
+public:
+    Pipeline();
 
 };
 
