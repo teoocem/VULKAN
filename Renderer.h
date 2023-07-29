@@ -36,6 +36,8 @@ private:
     VkRenderPass renderPass;
     VkCommandPool commandPool;
     VkCommandBuffer commandBuffer;
+    VkPipelineLayout pipelineLayout;
+    VkPipeline pipeline;
 
     struct {std::vector<VkSurfaceFormatKHR> formats;std::vector<VkPresentModeKHR>presentModes;VkSurfaceCapabilitiesKHR capabilities;} swapChainSupportInfos;
 

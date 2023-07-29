@@ -69,7 +69,6 @@ void Renderer::createCommandBuffer(){
         throw std::runtime_error("Failed to allocate memory for command buffer");
     }
     std::cout << "Command buffer allocated!\n";
-    recordCommandBuffer(commandBuffer);
 }
 
 void Renderer::recordCommandBuffer(VkCommandBuffer commandBuffer,uint32_t imageIndex){
@@ -93,6 +92,8 @@ void Renderer::recordCommandBuffer(VkCommandBuffer commandBuffer,uint32_t imageI
     renderPassBeginInfo.clearValueCount = 1;
 
     vkCmdBeginRenderPass(commandBuffer,&renderPassBeginInfo,VK_SUBPASS_CONTENTS_INLINE);
+
+    vkCmdBindPipeline(commandBuffer,VK_PIPELINE_BIND_POINT_GRAPHICS,pipeline);
 }
 
 void Renderer::createFrameBuffers(){
@@ -413,8 +414,6 @@ void Renderer::getSwapChainImages() {
 }
 
 void Renderer::createGraphicsPipeline() {
-    std::filesystem::path current_path = std::filesystem::current_path();
-    std::cout << current_path << std::endl;
     auto fragmentShader = readFile("../shaders/frag.spv");
     auto vertexShader = readFile("../shaders/vert.spv");
 
@@ -434,7 +433,6 @@ void Renderer::createGraphicsPipeline() {
     vertShaderCreateInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
 
     VkPipelineShaderStageCreateInfo shaderStageCreateInfos[2] = {fragShaderCreateInfo,vertShaderCreateInfo};
-
 
 
 
@@ -506,8 +504,58 @@ void Renderer::createGraphicsPipeline() {
     multisampling.alphaToCoverageEnable = VK_FALSE; // Optional
     multisampling.alphaToOneEnable = VK_FALSE; // Optional
 
+
+    VkPipelineColorBlendAttachmentState colorBlendAttachment = {};
+    colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+    colorBlendAttachment.blendEnable = VK_FALSE;
+    colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE; // Optional
+    colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
+    colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD; // Optional
+    colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE; // Optional
+    colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
+    colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
+
+
+    VkPipelineLayoutCreateInfo layoutCreateInfo = {};
+    layoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    layoutCreateInfo.pPushConstantRanges = nullptr;
+    layoutCreateInfo.pSetLayouts = nullptr;
+    layoutCreateInfo.setLayoutCount = 0;
+    layoutCreateInfo.pushConstantRangeCount = 0;
+
+    if(vkCreatePipelineLayout(main_devices.device,&layoutCreateInfo,nullptr,&pipelineLayout)!=VK_SUCCESS){
+        throw std::runtime_error("Failed to create pipeline layout");
+    }
+    std::cout << "Pipeline layout succesfully created!\n";
+
+
+
+
+    VkGraphicsPipelineCreateInfo graphicsPipelineCreateInfo ={};
+    graphicsPipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    graphicsPipelineCreateInfo.layout = pipelineLayout;
+    graphicsPipelineCreateInfo.renderPass = renderPass;
+    graphicsPipelineCreateInfo.pViewportState = &viewPortState;
+    graphicsPipelineCreateInfo.pVertexInputState = &vertexInputStateCreateInfo;
+    graphicsPipelineCreateInfo.pRasterizationState = &pipelineRasterizationStateCreateInfo;
+    graphicsPipelineCreateInfo.pMultisampleState = &multisampling;
+    graphicsPipelineCreateInfo.pInputAssemblyState = &inputAssemblyStateCreateInfo;
+    graphicsPipelineCreateInfo.pDepthStencilState = nullptr;
+    graphicsPipelineCreateInfo.pDynamicState = &pipelineDynamicStateCreateInfo;
+
+    graphicsPipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
+    graphicsPipelineCreateInfo.basePipelineIndex = -1;
+
+    if(vkCreateGraphicsPipelines(main_devices.device,VK_NULL_HANDLE,1,&graphicsPipelineCreateInfo,nullptr,&pipeline) != VK_SUCCESS){
+        throw std::runtime_error("Failed to create pipelines");
+    }
+    std::cout << "Pipeline succesfully created!\n";
+
+
     vkDestroyShaderModule(main_devices.device,fragmentModule,nullptr);
     vkDestroyShaderModule(main_devices.device,vertexModule,nullptr);
+
+
 
 }
 
