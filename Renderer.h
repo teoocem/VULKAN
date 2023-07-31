@@ -38,6 +38,11 @@ private:
     VkCommandBuffer commandBuffer;
     VkPipelineLayout pipelineLayout;
     VkPipeline pipeline;
+    VkQueue graphicsQueue;
+    VkQueue presentQueue;
+    VkSemaphore imageAvailableSemaphore;
+    VkSemaphore renderFinishedSemaphore;
+    VkFence inFlightFence;
 
     struct {std::vector<VkSurfaceFormatKHR> formats;std::vector<VkPresentModeKHR>presentModes;VkSurfaceCapabilitiesKHR capabilities;} swapChainSupportInfos;
 
@@ -59,6 +64,7 @@ public:
     void createImageViews();
     void createGraphicsPipeline();
     VkShaderModule createShaderModule();
+    void createSyncObjects();
 
 
     //Getter functions
@@ -94,6 +100,10 @@ public:
     void createCommandBuffer();
 
     void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
+
+    void mainLoop();
+
+    void drawFrame();
 };
 
 
